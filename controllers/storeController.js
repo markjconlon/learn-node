@@ -11,6 +11,8 @@ exports.addStore = (req, res) => {
   res.render('editStore', {title: 'Add Store 💩🚁'})
 }
 
+// you either have to wrap async await functions in a try catch or
+// through an errorHandler function which is in errorHandlers.js line 9
 exports.createStore = async (req, res) => {
   // passes request from body of the add store form with name etc.
   // strict only allows the data we are looking for
