@@ -19,5 +19,5 @@ exports.createStore = async (req, res) => {
   const store = new Store(req.body);
   // sends the data to mongoose and sends back if it was successful or errors
   await store.save();
-  console.log('It worked!');
+  res.redirect('/');
 }
