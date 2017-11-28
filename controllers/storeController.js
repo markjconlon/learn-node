@@ -16,8 +16,8 @@ exports.addStore = (req, res) => {
 exports.createStore = async (req, res) => {
   // passes request from body of the add store form with name etc.
   // strict only allows the data we are looking for
-  const store = new Store(req.body);
   // sends the data to mongoose and sends back if it was successful or errors
-  await store.save();
-  res.redirect('/');
+  const store = await (new Store(req.body)).save();
+  req.flash('success', `Sucessfully Created ${store.name}. Care to leave a review?`);
+  res.redirect(`/store/${store.slug}`);
 }
