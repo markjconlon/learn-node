@@ -1,0 +1,12 @@
+mixin storeCard(store = {})
+  .store
+    .store__hero
+      .store__actions
+        button soon
+      img(src=`/uploads/${store.photo || 'store.png' }`)
+      h2.title
+        a(href=`/store/${store.slug}`) #{store.name}
+    .store__details
+      //- incase store description is really long we split into an array of
+      //- the words then slice for the first to 25th word then join it to a string
+      p= store.description.split(' ').slice(0, 25).join(' ')
