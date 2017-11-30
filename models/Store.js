@@ -16,7 +16,27 @@ const storeSchema = new mongoose.Schema({
     trim: true
   },
   // means we will be passing an array of strings
-  tags: [String]
+  tags: [String],
+  created: {
+    type: Date,
+    default: Date.now
+  },
+  location: {
+    // going to be storing this as a pin on a map
+    type: {
+      type: String,
+      default: 'Point'
+    },
+    coordinates: [{
+      type: Number,
+      // this is the same as required true
+      required: 'You must supply coordinates!'
+    }],
+    address: {
+      type: String,
+      required: ' You must supply an address!'
+    }
+  }
 });
 
 // have to use a proper function because you need this
