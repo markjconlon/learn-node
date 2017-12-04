@@ -1,5 +1,20 @@
 const mongoose = require('mongoose');
 const Store = mongoose.model('Store');
+const multer = require('multer');
+const jimp = require('jimp');
+const uuid = require('uuid');
+
+const multerOptions = {
+  storage: multer.memoryStorage(),
+  fileFilter: function(req, file, next){
+    const isPhoto = file.mimetype.startsWith('image/');
+    if (isPhoto) {
+      next(null, true);
+    } else {
+      next({ message: 'That filetype isn\'t allowed!'}, false);
+    }
+  }
+}
 
 exports.homePage = (req, res) => {
   console.log(req.name);
@@ -10,6 +25,23 @@ exports.addStore = (req, res) => {
   // allows us to use same template for add and edit store
   res.render('editStore', {title: 'Add Store 💩🚁'})
 }
+
+exports.upload = multer(multerOptions).single('photo');
+
+exports.resize = async (req, res, next) => {
+  // check if there is no new file to resize
+  if (!req.file){
+    next();
+    return;
+  }
+  const extension = req.file.mimetype.split('/')[1];
+  req.body.photo = `${uuid.v4()}.${extension}`;
+  // reads the file in buffer memory
+  const photo = await jimp.read(req.file.buffer);
+  await photo.resize(800, jimp.AUTO);
+  await photo.write(`./public/uploads/${req.body.photo}`);
+  next();
+};
 
 // you either have to wrap async await functions in a try catch or
 // through an errorHandler function which is in errorHandlers.js line 9
